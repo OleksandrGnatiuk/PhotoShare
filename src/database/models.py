@@ -1,3 +1,4 @@
+from datetime import datetime
 import enum
 
 from sqlalchemy import Column, Integer, String, DateTime, func, ForeignKey, Boolean, Enum
@@ -17,8 +18,8 @@ class Comment(Base):
     image_id = Column('image_id', ForeignKey('images.id', ondelete='CASCADE'), default=None)
     image = relationship('Image', backref="comments")
 
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
 
 image_m2m_tag = Table(
@@ -43,7 +44,7 @@ class TransformedImage(Base):
     qrcode_image_url = Column(String(), nullable=False)
     image_id = Column(Integer, ForeignKey('images.id', ondelete='CASCADE'), default=None)
     image = relationship('Image', backref='transformed_images')
-    created_at = Column(DateTime, default=func.now())
+    created_at = Column(DateTime, default=datetime.now)
 
 
 class Role(enum.Enum):
@@ -64,8 +65,8 @@ class User(Base):
     role = Column('role', Enum(Role), default=Role.user)
     confirmed = Column(Boolean, default=False)
     banned = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
 
 class Rating(Base):
@@ -92,5 +93,5 @@ class Image(Base):
     user_id = Column('user_id', ForeignKey('users.id', ondelete='CASCADE'), default=None)
     user = relationship('User', backref="images")
     tags = relationship("Tag", secondary=image_m2m_tag, backref="images")
-    created_at = Column('created_at', DateTime, default=func.now())
-    updated_at = Column('updated_at', DateTime, default=func.now(), onupdate=func.now())
+    created_at = Column('created_at', DateTime, default=datetime.now)
+    updated_at = Column('updated_at', DateTime, default=datetime.now, onupdate=datetime.now)
